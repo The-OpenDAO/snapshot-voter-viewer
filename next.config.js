@@ -2,7 +2,7 @@ function getAssetPrefix() {
   if (process.env.GITHUB_ACTIONS === "true") {
     const [, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
-    return `${repo.toLowerCase()}/`;
+    return `/${repo.toLowerCase()}/`;
   }
 
   return "";
