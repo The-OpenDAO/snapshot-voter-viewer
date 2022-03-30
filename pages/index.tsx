@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const urlInput = useInput("https://snapshot.org/#/theopendao.eth/proposal/0xacbc420c3696740786c76065c51cb8bc5ed0982d2162ee3f74441c14785b91c6");
   const [voterAddresses, setVoterAddresses] = useState<string[]>([]);
   const [pullVoterState, setPullVoterState] = useState(PullVoterState.None);
-  const version = `${process.env.VERSION}, ${moment().format("yyyy-MM-DD")}`;
+  const version = `${process.env.VERSION?.substring(0, 8)}, ${moment().format("yyyy-MM-DD")}`;
 
   const proposalValidation = useMemo(() => {
     const urlPrefix = "https://snapshot.org/#/theopendao.eth/proposal/";
