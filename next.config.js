@@ -12,6 +12,9 @@ function getAssetPrefix() {
 const nextConfig = {
   reactStrictMode: true,
   assetPrefix: getAssetPrefix(),
+  env: {
+    VERSION: process.env.VERSION,
+  }
 }
 
 module.exports = nextConfig
