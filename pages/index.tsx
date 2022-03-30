@@ -1,7 +1,8 @@
 import type { NextPage } from 'next'
-import { Container, Row, Col, Card, Text, Input, Button, useInput, Table, Loading } from '@nextui-org/react';
+import { Container, Row, Col, Card, Text, Input, Button, useInput, Table, Loading, Spacer } from '@nextui-org/react';
 import { useCallback, useMemo, useState } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
 enum PullVoterState {
   None,
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
   const urlInput = useInput("https://snapshot.org/#/theopendao.eth/proposal/0xacbc420c3696740786c76065c51cb8bc5ed0982d2162ee3f74441c14785b91c6");
   const [voterAddresses, setVoterAddresses] = useState<string[]>([]);
   const [pullVoterState, setPullVoterState] = useState(PullVoterState.None);
+  const version = `${process.env.VERSION}, ${moment().format("yyyy-MM-DD")}`;
 
   const proposalValidation = useMemo(() => {
     const urlPrefix = "https://snapshot.org/#/theopendao.eth/proposal/";
@@ -91,15 +93,15 @@ const Home: NextPage = () => {
 
   return (
     <Container
-      fluid
       css={{
         marginTop: "5rem",
+        marginBottom: "5rem",
       }}
-
       gap={1}
     >
-      <Row align="center">
+      <Row align="baseline">
         <Text h1>Snapshot Voter Viewer</Text>
+        <Text span css={{ paddingLeft: "1rem" }}>(Version: {version})</Text>
       </Row>
       <Row>
         <Input
@@ -113,32 +115,37 @@ const Home: NextPage = () => {
           width="50%"
         />
       </Row>
-      <Row >
+      <Spacer y={1} />
+      <Row>
         <Button
           onClick={() => pullVoters(proposalValidation.id)}
           clickable={!!proposalValidation.id && pullVoterState !== PullVoterState.Pulling}
         >
           {pullVoterState === PullVoterState.Pulling ? <Loading color="white" size="sm" /> : "Load Voters"}
         </Button>
-        <Button
-          onClick={() => downloadVoters()}
-        >
-          Export Voters
-        </Button>
+        <Spacer x={1} />
+        {pullVoterState === PullVoterState.Pulled &&
+          <Button onClick={() => downloadVoters()}>
+            Export Voters
+          </Button>}
       </Row>
+      <Spacer y={1} />
       {pullVoterState !== PullVoterState.None && <Row>
         <Table
+          compact
           css={{
             height: "auto",
             minWidth: "100%",
           }}
         >
           <Table.Header>
+            <Table.Column>#</Table.Column>
             <Table.Column>Voter ({voterAddresses.length})</Table.Column>
           </Table.Header>
           <Table.Body>
             {voterAddresses.map((voter, index) =>
               <Table.Row key={index}>
+                <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell>{voter}</Table.Cell>
               </Table.Row>
             )}

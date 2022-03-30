@@ -22,6 +22,8 @@ jobs:
       - name: Install packages
         run: yarn
       - name: Build project
+        env:
+          VERSION: ${{ github.sha }}
         run: yarn build
       - name: Export static files
         run: yarn export
